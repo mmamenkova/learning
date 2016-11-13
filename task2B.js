@@ -4,11 +4,6 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
-app.get('/2A', (req, res) => {
-  const sum = (+req.query.a || 0) + (+req.query.b || 0);
-  res.send(sum.toString());
-})
-
 app.get('/2B', (req, res) => {
   var fullname = req.query.fullname;
   const re = new RegExp('([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?');
