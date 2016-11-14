@@ -4,43 +4,42 @@ import cors from 'cors';
 const app = express();
 app.use(cors());
 
-app.get('/2B', (req, res) => {
-  var fullname = req.query.fullname;
-  const re = new RegExp('([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?(\u0020)?([\u0410-\u044fa-zA-Z\u00C0-\u017F]*)?');
+app.get('/2B', function(req, res) {
+  const re = new RegExp('(\\S+)(\u0020+)?(\\S+)?(\u0020+)?(\\S+)?(\u0020+)?(\\S+)?');
   const re2 = new RegExp('[0-9_/]');
-  var results = fullname.match(re);
-  var results2 = fullname.match(re2);
-  var regexp2 = /[\u0410-\u044fa-zA-Z\u00C0-\u017F]/;
 
-  var name = results[1];
-  var name3 = results[3];
-  var name5 = results[5];
-  var name7 = results[7];
-
-  if (fullname == '') {
-    res.send('Invalid fullname');
-  }
-  if (results2 != null) {
-    res.send('Invalid fullname');
-  }
-
-  if (results[7] != null) {
-    res.send('Invalid fullname');
+  if (req.query.fullname.length === 0) {
+    var mes = 'Invalid fullname';
   } else {
-      if (results[5] != undefined) {
-        name = regexp2.exec(name);
-        name3 = regexp2.exec(name3);
-        res.send(name5 + ' ' + name + '. ' + name3 + '.');
+    var fullname = req.query.fullname;
+    var results = fullname.match(re);
+    var results2 = fullname.match(re2);
+    if (results2 != null) {
+      mes = 'Invalid fullname';
+    } else {
+      if (results[7] != null) {
+        mes = 'Invalid fullname';
       } else {
-          if (results[3] != undefined ) {
-            name = regexp2.exec(name);
-            res.send(name3 + ' ' + name + '.');
+        if (results[5] != null) {
+          var name = results[1];
+          var name3 = results[3];
+          var name5 = results[5];
+          mes = name5 + ' ' + name[0] + '. ' + name3[0] + '.';
+        } else {
+          if (results[3] != null ) {
+            name = results[1];
+            name3 = results[3];
+            mes = name3 + ' ' + name[0] + '.';
           } else {
-              res.send(name);
+            name = results[1];
+            mes = name;
           }
+        }
       }
+    }
   }
-
+res.send(mes);
+console.log(mes);
 })
 
 app.listen(3000, () => {
